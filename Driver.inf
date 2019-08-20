@@ -1,0 +1,41 @@
+;
+;************************ 23:29 20.03.2019 **************************
+; //////////////////////// Помазков М.В. ////////////////////////////
+;
+Primer.Inf 
+[Version] 
+Signature="$Hacker$" 
+Class=Unknown Provider=%HackerMagazine% 
+DriverVer=27/10/2005,0.0.0.1
+[Manufacturer] %HackerMagazine%=Hacker.Magazine
+[Hacker.Magazine] 
+%BPS%=BPS.Install, *hackermagazine\BPS 
+[DestinationDirs] 
+BPS.Files.Driver=10,System32\Drivers 
+; путь для копирования драйвера под Windows 98
+ BPS.Files.Driver.NTx86=10,System32\Drivers 
+; путь для копирования драйвера под Windows NT
+[SourceDisksNames] 
+1="BPS",,, [SourceDisksFiles] BPS.sys=1,drv\w98 
+; путь, где находится версия драйвера под Windows 98
+[SourceDisksFiles.x86] A:/DRV/BPS.sys=1,drv\nt 
+; путь, где находится версия драйвера под Windows NT 
+[SourceDisksFiles.x64] A:/DRV/BPS.sys=1,drv\nt
+; в нашем случае обе версии драйверов, конечно, одинаковые
+; Windows 98 
+; секция, используемая в случае установки драйвера под Windows 98 
+[Primer.Install] 
+CopyFiles=BPS.Files.Driver AddReg=BPS.AddReg
+[Primer.AddReg] HKR,,DevLoader,,*ntkern HKR,,NTMPDriver,,BPS.sys [BPS.Files.Driver] BPS.sys 
+; Windows 2000, XP, Server 2003 
+; секция, используемая в случае установки драйвера под Windows NT 
+[BPS.Install.x64] CopyFiles=BPS.Files.Driver.x64
+[BPS.Files.Driver.x64] BPS.sys,,,%COPYFLG_NOSKIP%
+[BPS.Install.x64.Services] AddService = BPS, %SPSVCINST_ASSOCSERVICE%, BPS.Service
+[BPS.Service] DisplayName = %BPS.ServiceName% ServiceType = %SERVICE_KERNEL_DRIVER% StartType = %SERVICE_AUTO_START% ErrorControl = %SERVICE_ERROR_NORMAL% ServiceBinary = %10%\System32\Drivers\BPS.sys 
+; Строки 
+[Strings] 
+ HackerMagazine="Napisanie draiverov v podrobnostjah №4"
+ BPS="BPS driver:checked build"
+ BPS.ServiceName="BPS NTDDK driver (V.001)"
+ SPSVCINST_ASSOCSERVICE=0x00000002 COPYFLG_NOSKIP=2 SERVICE_KERNEL_DRIVER=1 SERVICE_AUTO_START=2 SERVICE_DEMAND_START=3 SERVICE_ERROR_NORMAL=1
